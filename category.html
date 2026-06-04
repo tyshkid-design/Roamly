@@ -1,0 +1,227 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Category — Memeyai News</title>
+  <link rel="stylesheet" href="style.css">
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><rect width='32' height='32' rx='4' fill='%23C8102E'/><text x='16' y='22' text-anchor='middle' font-size='18' fill='white' font-family='serif' font-weight='bold'>M</text></svg>">
+  <style>
+    #reading-progress { position: fixed; top: 0; left: 0; height: 3px; background: var(--red); z-index: 9999; width: 0; }
+    .cat-hero {
+      background: linear-gradient(135deg, var(--black), var(--charcoal));
+      color: white;
+      padding: 36px 0;
+      margin-bottom: 32px;
+    }
+    .cat-hero h1 { font-family: var(--font-display); font-size: 2.4rem; font-weight: 900; margin-bottom: 6px; }
+    .cat-hero p { color: rgba(255,255,255,0.6); font-size: 0.9rem; }
+    .cat-filter-bar { display: flex; gap: 10px; flex-wrap: wrap; margin-bottom: 28px; }
+    .cat-filter-btn {
+      padding: 7px 16px; border-radius: 20px; font-size: 0.8rem; font-weight: 600;
+      border: 1.5px solid var(--border); color: var(--mid-gray); cursor: pointer;
+      transition: all var(--transition); background: var(--white);
+    }
+    .cat-filter-btn:hover, .cat-filter-btn.active { background: var(--red); border-color: var(--red); color: white; }
+    .cat-layout { display: grid; grid-template-columns: 1fr 320px; gap: 28px; }
+    @media(max-width:768px) { .cat-layout { grid-template-columns: 1fr; } }
+  </style>
+</head>
+<body>
+<div id="reading-progress"></div>
+<div id="notification-bar">
+  <div class="notif-content"><span class="notif-tag">BREAKING</span><span class="notif-text"></span></div>
+  <button class="close-notif">&times;</button>
+</div>
+
+<div class="top-nav">
+  <div class="container"><div class="inner">
+    <div class="left">
+      <span id="live-clock"></span>
+      <span style="color:var(--border)">|</span>
+      <a href="index.html" style="font-weight:600;color:var(--red);">← Home</a>
+    </div>
+    <div class="right">
+      <button id="dark-mode-toggle" style="font-size:1rem;padding:2px 6px;cursor:pointer;background:var(--border);border-radius:4px;border:none;">🌙</button>
+    </div>
+  </div></div>
+</div>
+
+<header class="masthead">
+  <div class="container"><div class="masthead-inner">
+    <a href="index.html" class="logo-wrap">
+      <div class="logo-icon"><svg viewBox="0 0 28 28" fill="white"><path d="M4 4h4l6 10 6-10h4v20h-4V12l-6 9-6-9v12H4V4z"/></svg></div>
+      <div class="logo-text">
+        <div class="logo-name">Memeyai<span>.</span>News</div>
+        <div class="logo-tagline">East Africa's Digital Newsroom</div>
+      </div>
+    </a>
+  </div></div>
+</header>
+
+<div class="breaking-bar">
+  <div class="container"><div class="inner">
+    <div class="breaking-label"><span class="dot"></span> BREAKING</div>
+    <div class="ticker-wrap"><div class="ticker-content"></div></div>
+  </div></div>
+</div>
+
+<nav class="primary-nav">
+  <div class="container"><div class="inner">
+    <button class="hamburger"><span></span><span></span><span></span></button>
+    <ul class="nav-links">
+      <li><a href="index.html">🏠 Home</a></li>
+      <li><a href="category.html?cat=politics">Politics</a></li>
+      <li><a href="category.html?cat=business">Business</a></li>
+      <li><a href="category.html?cat=tech">Technology</a></li>
+      <li><a href="category.html?cat=health">Health</a></li>
+      <li><a href="category.html?cat=sports">Sports</a></li>
+      <li><a href="category.html?cat=culture">Culture</a></li>
+      <li><a href="category.html?cat=opinion">Opinion</a></li>
+      <li><a href="category.html?cat=all">All News</a></li>
+    </ul>
+    <div class="nav-search">
+      <input type="search" placeholder="Search stories…">
+      <button>🔍</button>
+    </div>
+  </div></div>
+</nav>
+
+<!-- Category Hero -->
+<div class="cat-hero">
+  <div class="container">
+    <div class="tag" id="cat-tag" style="margin-bottom:10px;">Section</div>
+    <h1 class="category-page-title">All News</h1>
+    <p>The latest coverage from East Africa's most trusted digital newsroom</p>
+  </div>
+</div>
+
+<main class="container">
+  <div class="cat-layout">
+
+    <div>
+      <!-- Filter bar -->
+      <div class="cat-filter-bar">
+        <button class="cat-filter-btn active" data-filter="all">All</button>
+        <button class="cat-filter-btn" data-filter="latest">Latest</button>
+        <button class="cat-filter-btn" data-filter="popular">Most Read</button>
+        <button class="cat-filter-btn" data-filter="video">Video</button>
+      </div>
+
+      <!-- Articles grid -->
+      <div class="grid-3" id="category-articles" style="gap:20px;">
+        <!-- Skeletons -->
+        <div class="article-card"><div class="card-image skeleton"></div><div class="card-body"><div class="skeleton" style="height:14px;width:50%;margin:8px 0;"></div><div class="skeleton" style="height:14px;margin:4px 0;"></div><div class="skeleton" style="height:14px;width:70%;"></div></div></div>
+        <div class="article-card"><div class="card-image skeleton"></div><div class="card-body"><div class="skeleton" style="height:14px;width:50%;margin:8px 0;"></div><div class="skeleton" style="height:14px;margin:4px 0;"></div><div class="skeleton" style="height:14px;width:70%;"></div></div></div>
+        <div class="article-card"><div class="card-image skeleton"></div><div class="card-body"><div class="skeleton" style="height:14px;width:50%;margin:8px 0;"></div><div class="skeleton" style="height:14px;margin:4px 0;"></div><div class="skeleton" style="height:14px;width:70%;"></div></div></div>
+      </div>
+
+      <div style="text-align:center;padding:32px 0;">
+        <button id="load-more-btn" style="background:var(--red);color:white;padding:12px 32px;font-size:0.85rem;font-weight:700;border-radius:2px;letter-spacing:0.06em;border:none;cursor:pointer;">
+          Load More Stories
+        </button>
+      </div>
+    </div>
+
+    <!-- Sidebar -->
+    <aside class="sidebar">
+      <div class="widget">
+        <div class="widget-header"><span class="live-badge">● LIVE</span> Updates</div>
+        <div class="widget-body" style="padding:12px 16px;">
+          <div class="live-feed"></div>
+        </div>
+      </div>
+
+      <div class="widget">
+        <div class="widget-header">🔥 Trending Today</div>
+        <div class="widget-body"><div class="trending-list"></div></div>
+      </div>
+
+      <div class="newsletter-widget" style="border-radius:2px;">
+        <h3>Stay Informed</h3>
+        <p>Top East Africa stories every morning.</p>
+        <form class="newsletter-form" onsubmit="return false;">
+          <input type="email" placeholder="Your email">
+          <button type="submit">Subscribe Free</button>
+        </form>
+      </div>
+
+      <div style="background:var(--border);height:250px;display:flex;align-items:center;justify-content:center;font-size:0.7rem;color:var(--light-gray);text-transform:uppercase;letter-spacing:0.1em;border:1px dashed var(--light-gray);">Ad 300×250</div>
+    </aside>
+  </div>
+</main>
+
+<footer>
+  <div class="footer-top">
+    <div class="container">
+      <div class="footer-grid">
+        <div class="footer-brand">
+          <div class="logo-name">Memeyai<span>.</span>News</div>
+          <p>Credible news from East Africa, powered by AI.</p>
+          <div class="footer-socials">
+            <a href="#" class="footer-social">𝕏</a>
+            <a href="#" class="footer-social">f</a>
+            <a href="#" class="footer-social">▶</a>
+          </div>
+        </div>
+        <div class="footer-col">
+          <h4>Sections</h4>
+          <ul>
+            <li><a href="category.html?cat=politics">Politics</a></li>
+            <li><a href="category.html?cat=business">Business</a></li>
+            <li><a href="category.html?cat=tech">Technology</a></li>
+          </ul>
+        </div>
+        <div class="footer-col">
+          <h4>Company</h4>
+          <ul>
+            <li><a href="#">About</a></li>
+            <li><a href="#">Contact</a></li>
+            <li><a href="#">Advertise</a></li>
+          </ul>
+        </div>
+        <div class="footer-col">
+          <h4>Legal</h4>
+          <ul>
+            <li><a href="#">Privacy Policy</a></li>
+            <li><a href="#">Terms of Use</a></li>
+            <li><a href="#">Corrections</a></li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="container">
+    <div class="footer-bottom">
+      <span>© 2025 Memeyai News / business.memeyai.com</span>
+    </div>
+  </div>
+</footer>
+
+<script src="articles.js"></script>
+<script src="main.js"></script>
+<script>
+document.addEventListener("DOMContentLoaded", () => {
+  // Update category tag badge
+  const params = new URLSearchParams(window.location.search);
+  const cat = params.get("cat") || "all";
+  const tagEl = document.getElementById("cat-tag");
+  if (tagEl) {
+    tagEl.textContent = cat === "all" ? "ALL NEWS" : cat.toUpperCase();
+    tagEl.className = "tag " + (cat !== "all" ? cat : "");
+  }
+  // Update page title
+  document.title = (cat === "all" ? "All News" : cat.charAt(0).toUpperCase() + cat.slice(1)) + " — Memeyai News";
+
+  // Filter buttons
+  const filterBtns = document.querySelectorAll(".cat-filter-btn");
+  filterBtns.forEach(btn => {
+    btn.addEventListener("click", () => {
+      filterBtns.forEach(b => b.classList.remove("active"));
+      btn.classList.add("active");
+    });
+  });
+});
+</script>
+</body>
+</html>

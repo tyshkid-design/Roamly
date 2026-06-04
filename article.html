@@ -1,0 +1,354 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Article — Memeyai News</title>
+  <meta name="description" content="Read the full story on Memeyai News.">
+  <link rel="stylesheet" href="style.css">
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><rect width='32' height='32' rx='4' fill='%23C8102E'/><text x='16' y='22' text-anchor='middle' font-size='18' fill='white' font-family='serif' font-weight='bold'>M</text></svg>">
+  <style>
+    #reading-progress { position: fixed; top: 0; left: 0; height: 3px; background: var(--red); z-index: 9999; width: 0; transition: width 0.1s; }
+    .article-layout { display: grid; grid-template-columns: 1fr 320px; gap: 40px; padding: 32px 0; }
+    .ai-summary-widget {
+      background: linear-gradient(135deg, var(--charcoal), var(--dark-gray));
+      color: white;
+      padding: 16px 20px;
+      border-radius: 4px;
+      margin-bottom: 24px;
+      font-size: 0.85rem;
+      line-height: 1.7;
+      border-left: 4px solid var(--red);
+    }
+    .ai-summary-widget strong { color: var(--gold); font-family: var(--font-display); }
+    .comments-section { margin-top: 40px; padding-top: 28px; border-top: 2px solid var(--border); }
+    .comment-form textarea {
+      width: 100%; padding: 12px; border: 1.5px solid var(--border); border-radius: 2px;
+      font-family: var(--font-body); font-size: 0.88rem; resize: vertical; min-height: 100px; outline: none;
+      transition: border-color var(--transition);
+    }
+    .comment-form textarea:focus { border-color: var(--red); }
+    .comment-form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 12px; }
+    .comment-form input {
+      width: 100%; padding: 10px 12px; border: 1.5px solid var(--border); border-radius: 2px;
+      font-family: var(--font-body); font-size: 0.85rem; outline: none;
+    }
+    .comment-form input:focus { border-color: var(--red); }
+    .comment-submit { background: var(--red); color: white; padding: 10px 24px; font-size: 0.85rem; font-weight: 700; border-radius: 2px; letter-spacing: 0.05em; }
+    .comment-item { padding: 16px 0; border-bottom: 1px solid var(--border); }
+    .comment-author { font-weight: 700; font-size: 0.85rem; margin-bottom: 4px; }
+    .comment-text { font-size: 0.85rem; color: var(--mid-gray); }
+    .comment-time { font-size: 0.72rem; color: var(--light-gray); margin-bottom: 6px; }
+    @media(max-width:768px) {
+      .article-layout { grid-template-columns: 1fr; }
+      .comment-form-row { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+
+<div id="reading-progress"></div>
+<div id="notification-bar">
+  <div class="notif-content"><span class="notif-tag">BREAKING</span><span class="notif-text"></span></div>
+  <button class="close-notif">&times;</button>
+</div>
+
+<!-- TOP NAV -->
+<div class="top-nav">
+  <div class="container">
+    <div class="inner">
+      <div class="left">
+        <span id="live-clock"></span>
+        <span style="color:var(--border)">|</span>
+        <a href="index.html" style="font-weight:600;color:var(--red);">← Back to Memeyai News</a>
+      </div>
+      <div class="right">
+        <button id="dark-mode-toggle" style="font-size:1rem;padding:2px 6px;cursor:pointer;background:var(--border);border-radius:4px;border:none;">🌙</button>
+        <a href="#" class="social-link">𝕏</a>
+        <a href="#" class="social-link">f</a>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- MASTHEAD -->
+<header class="masthead">
+  <div class="container">
+    <div class="masthead-inner">
+      <a href="index.html" class="logo-wrap">
+        <div class="logo-icon">
+          <svg viewBox="0 0 28 28" fill="white"><path d="M4 4h4l6 10 6-10h4v20h-4V12l-6 9-6-9v12H4V4z"/></svg>
+        </div>
+        <div class="logo-text">
+          <div class="logo-name">Memeyai<span>.</span>News</div>
+          <div class="logo-tagline">East Africa's Digital Newsroom</div>
+        </div>
+      </a>
+    </div>
+  </div>
+</header>
+
+<!-- BREAKING TICKER -->
+<div class="breaking-bar">
+  <div class="container"><div class="inner">
+    <div class="breaking-label"><span class="dot"></span> BREAKING</div>
+    <div class="ticker-wrap"><div class="ticker-content"></div></div>
+  </div></div>
+</div>
+
+<!-- PRIMARY NAV -->
+<nav class="primary-nav">
+  <div class="container"><div class="inner">
+    <button class="hamburger"><span></span><span></span><span></span></button>
+    <ul class="nav-links">
+      <li><a href="index.html">🏠 Home</a></li>
+      <li><a href="category.html?cat=politics">Politics</a></li>
+      <li><a href="category.html?cat=business">Business</a></li>
+      <li><a href="category.html?cat=tech">Technology</a></li>
+      <li><a href="category.html?cat=health">Health</a></li>
+      <li><a href="category.html?cat=sports">Sports</a></li>
+      <li><a href="category.html?cat=culture">Culture</a></li>
+      <li><a href="category.html?cat=opinion">Opinion</a></li>
+    </ul>
+    <div class="nav-search">
+      <input type="search" placeholder="Search stories…">
+      <button>🔍</button>
+    </div>
+  </div></div>
+</nav>
+
+<!-- ARTICLE PAGE LAYOUT -->
+<main class="container">
+  <div class="article-layout">
+
+    <!-- ARTICLE MAIN -->
+    <article>
+      <div class="article-header">
+        <span class="article-tag tag">Category</span>
+        <h1 class="article-title">Loading article…</h1>
+      </div>
+
+      <div class="article-meta">
+        <div class="author">
+          <div style="width:36px;height:36px;border-radius:50%;background:linear-gradient(135deg,var(--red),var(--charcoal));flex-shrink:0;"></div>
+          <div>
+            <div class="author-name">Author Name</div>
+            <div class="date article-date"></div>
+          </div>
+        </div>
+        <div class="article-share">
+          <button class="share-btn" data-network="twitter">𝕏 Share</button>
+          <button class="share-btn" data-network="facebook">f Share</button>
+          <button class="share-btn" data-network="whatsapp">◉ WhatsApp</button>
+          <button class="share-btn" data-network="copy">🔗 Copy Link</button>
+        </div>
+      </div>
+
+      <!-- AI Summary -->
+      <div class="ai-summary-widget" id="ai-summary-box">
+        <div class="ai-typing"><span></span><span></span><span></span></div>
+      </div>
+
+      <!-- Featured Image -->
+      <figure class="article-featured-img">
+        <img class="article-hero-img" src="" alt="Article image" style="min-height:200px;background:var(--border);">
+        <figcaption>Photo: Memeyai News / Getty Images</figcaption>
+      </figure>
+
+      <!-- Article Body -->
+      <div class="article-body">
+        <!-- Rendered by JS -->
+      </div>
+
+      <!-- Tags -->
+      <div style="margin-top:28px;padding-top:20px;border-top:1px solid var(--border);">
+        <strong style="font-size:0.78rem;text-transform:uppercase;letter-spacing:0.1em;color:var(--mid-gray);">Topics: </strong>
+        <a href="#" class="tag" style="margin:3px;">East Africa</a>
+        <a href="#" class="tag business" style="margin:3px;">Business</a>
+        <a href="#" class="tag tech" style="margin:3px;">Technology</a>
+        <a href="#" class="tag politics" style="margin:3px;">Kenya</a>
+      </div>
+
+      <!-- Share again -->
+      <div style="margin-top:28px;padding:20px;background:var(--bg);border-radius:2px;text-align:center;">
+        <p style="font-size:0.85rem;color:var(--mid-gray);margin-bottom:12px;font-weight:600;">Found this story useful? Share it.</p>
+        <div style="display:flex;gap:8px;justify-content:center;flex-wrap:wrap;">
+          <button class="share-btn" data-network="twitter" style="padding:8px 20px;">𝕏 Twitter</button>
+          <button class="share-btn" data-network="facebook" style="padding:8px 20px;">f Facebook</button>
+          <button class="share-btn" data-network="whatsapp" style="padding:8px 20px;">◉ WhatsApp</button>
+          <button class="share-btn" data-network="linkedin" style="padding:8px 20px;">in LinkedIn</button>
+        </div>
+      </div>
+
+      <!-- Comments -->
+      <section class="comments-section">
+        <h3 class="section-title" style="margin-bottom:20px;">Comments (3)</h3>
+
+        <!-- Existing comments -->
+        <div id="comments-list">
+          <div class="comment-item">
+            <div class="comment-author">Wanjiru M.</div>
+            <div class="comment-time">2 hours ago</div>
+            <div class="comment-text">Great reporting as always. This is really important for the region's digital future. Looking forward to more follow-up coverage.</div>
+          </div>
+          <div class="comment-item">
+            <div class="comment-author">Hassan K.</div>
+            <div class="comment-time">4 hours ago</div>
+            <div class="comment-text">The implications for East African fintech are huge. Thanks Memeyai for covering this so thoroughly.</div>
+          </div>
+          <div class="comment-item">
+            <div class="comment-author">Amara O.</div>
+            <div class="comment-time">6 hours ago</div>
+            <div class="comment-text">Finally some credible news source covering East Africa properly. Bookmarked!</div>
+          </div>
+        </div>
+
+        <!-- Comment form -->
+        <div style="margin-top:28px;">
+          <h4 style="font-family:var(--font-display);font-size:1rem;margin-bottom:16px;">Leave a Comment</h4>
+          <form class="comment-form" onsubmit="handleComment(event)">
+            <div class="comment-form-row">
+              <input type="text" placeholder="Your Name*" required id="comment-name">
+              <input type="email" placeholder="Email (not published)" id="comment-email">
+            </div>
+            <textarea placeholder="Share your thoughts…" id="comment-text" required style="margin-bottom:12px;"></textarea>
+            <button type="submit" class="comment-submit">Post Comment</button>
+          </form>
+        </div>
+      </section>
+    </article>
+
+    <!-- SIDEBAR -->
+    <aside class="sidebar">
+      <div class="widget">
+        <div class="widget-header"><span class="live-badge">● LIVE</span> Updates</div>
+        <div class="widget-body" style="padding:12px 16px;">
+          <div class="live-feed"></div>
+        </div>
+      </div>
+
+      <div class="widget">
+        <div class="widget-header">🔥 Trending Today</div>
+        <div class="widget-body">
+          <div class="trending-list"></div>
+        </div>
+      </div>
+
+      <div class="newsletter-widget" style="border-radius:2px;">
+        <h3>Stay Informed</h3>
+        <p>Get East Africa's top stories every morning.</p>
+        <form class="newsletter-form" onsubmit="return false;">
+          <input type="email" placeholder="Your email address">
+          <button type="submit">Subscribe Free</button>
+        </form>
+      </div>
+
+      <div style="background:var(--border);height:250px;display:flex;align-items:center;justify-content:center;font-size:0.7rem;color:var(--light-gray);text-transform:uppercase;letter-spacing:0.1em;border:1px dashed var(--light-gray);">Ad 300×250</div>
+    </aside>
+
+  </div>
+
+  <!-- Related Articles -->
+  <section class="section" style="border-top:2px solid var(--border);">
+    <div class="section-header">
+      <h2 class="section-title">Related Stories</h2>
+      <a href="index.html" class="view-all">View All</a>
+    </div>
+    <div class="grid-3" id="related-articles"></div>
+  </section>
+</main>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-top">
+    <div class="container">
+      <div class="footer-grid">
+        <div class="footer-brand">
+          <div class="logo-name">Memeyai<span>.</span>News</div>
+          <p>Credible news from East Africa. Powered by AI, written by journalists.</p>
+          <div class="footer-socials">
+            <a href="#" class="footer-social">𝕏</a>
+            <a href="#" class="footer-social">f</a>
+            <a href="#" class="footer-social">▶</a>
+          </div>
+        </div>
+        <div class="footer-col">
+          <h4>Sections</h4>
+          <ul>
+            <li><a href="category.html?cat=politics">Politics</a></li>
+            <li><a href="category.html?cat=business">Business</a></li>
+            <li><a href="category.html?cat=tech">Technology</a></li>
+            <li><a href="category.html?cat=opinion">Opinion</a></li>
+          </ul>
+        </div>
+        <div class="footer-col">
+          <h4>Countries</h4>
+          <ul>
+            <li><a href="#">Kenya</a></li>
+            <li><a href="#">Uganda</a></li>
+            <li><a href="#">Tanzania</a></li>
+            <li><a href="#">Rwanda</a></li>
+          </ul>
+        </div>
+        <div class="footer-col">
+          <h4>Company</h4>
+          <ul>
+            <li><a href="#">About Us</a></li>
+            <li><a href="#">Contact</a></li>
+            <li><a href="#">Advertise</a></li>
+            <li><a href="#">Careers</a></li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="container">
+    <div class="footer-bottom">
+      <span>© 2025 Memeyai News / business.memeyai.com</span>
+      <div class="footer-bottom-links">
+        <a href="#">Privacy Policy</a>
+        <a href="#">Terms of Use</a>
+      </div>
+    </div>
+  </div>
+</footer>
+
+<script src="articles.js"></script>
+<script src="main.js"></script>
+<script>
+function handleComment(e) {
+  e.preventDefault();
+  const name = document.getElementById("comment-name").value.trim();
+  const text = document.getElementById("comment-text").value.trim();
+  if (!name || !text) return;
+
+  const list = document.getElementById("comments-list");
+  const item = document.createElement("div");
+  item.className = "comment-item";
+  item.style.background = "var(--bg)";
+  item.style.padding = "12px";
+  item.style.borderRadius = "2px";
+  item.innerHTML = `
+    <div class="comment-author">${escapeHtml(name)}</div>
+    <div class="comment-time">Just now</div>
+    <div class="comment-text">${escapeHtml(text)}</div>
+  `;
+  item.style.opacity = "0";
+  list.prepend(item);
+  requestAnimationFrame(() => { item.style.transition = "opacity 0.4s"; item.style.opacity = "1"; });
+
+  document.getElementById("comment-name").value = "";
+  document.getElementById("comment-text").value = "";
+  document.getElementById("comment-email").value = "";
+
+  const btn = e.target.querySelector("button");
+  btn.textContent = "✓ Comment Posted!";
+  btn.style.background = "#16a34a";
+  setTimeout(() => { btn.textContent = "Post Comment"; btn.style.background = ""; }, 3000);
+}
+function escapeHtml(s) {
+  const d = document.createElement("div"); d.textContent = s; return d.innerHTML;
+}
+</script>
+</body>
+</html>
